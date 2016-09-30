@@ -1,4 +1,8 @@
 class Example < Raptor::TestSuite
+  description do
+    'Basic test'
+  end
+
   configure do
     @count = 0
     @marble = 'Marble Variable'
@@ -7,6 +11,7 @@ class Example < Raptor::TestSuite
   verification '01' do
     @count += 40
     logger.info '*** Verification ***'
+    assert_true(false, {issues: '6545, 54566', message: 'BUG example'})
   end
 
   verification '02' do

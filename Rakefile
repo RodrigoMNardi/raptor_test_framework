@@ -10,7 +10,7 @@ namespace :builder do
     path += params[:name]
     path += '.rb'
 
-    builder = Factory::Builder.new({test: path})
+    builder = Factory::Builder.new({test: path, name: params[:name]})
     builder.run
   end
 end
