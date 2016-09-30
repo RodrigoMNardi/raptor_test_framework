@@ -21,8 +21,9 @@ module Factory
       @results[:warn] += 1
     end
 
-    def add_fatal_error
+    def add_fatal_error(error)
       @results[:fatal_error] += 1
+      @fatal_error = error
     end
 
     def raw

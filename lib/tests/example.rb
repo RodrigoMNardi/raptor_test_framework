@@ -25,4 +25,8 @@ class Example < Raptor::TestSuite
       assert_true(false, {issues: '6545, 54566', message: 'BUG example'})
     end
   end
+
+  verification '03 bomba' do
+    raise 'BOOOOMMMMMMMMMMMMMM'
+  end
 end

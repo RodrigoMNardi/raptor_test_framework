@@ -55,12 +55,22 @@ module Raptor
 
       if @@suite[:configure]
         @@logger.info @@suite[:configure][0]
-        @@logger.info @@suite[:configure][1].call
+        begin
+          @@logger.info @@suite[:configure][1].call
+        rescue Exception => error
+          @reporter.add_fatal_error(error)
+          return
+        end
       end
 
       @@suite[:verification].each do |name, block|
-        @@logger.info name
-        block.call
+        begin
+          @@logger.info name
+          block.call
+        rescue Exception => error
+          @reporter.add_fatal_error(error)
+          return
+        end
       end
     end
 
