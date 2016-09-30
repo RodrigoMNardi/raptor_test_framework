@@ -28,7 +28,7 @@ module Factory
         @reporter = Factory::Reporter.new(test.to_s)
         test.add_report(@reporter)
         test.run
-        @reporter.display
+        puts @reporter.display
       end
     end
   end

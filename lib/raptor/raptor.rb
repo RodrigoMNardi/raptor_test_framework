@@ -68,6 +68,10 @@ module Raptor
       @@names = []
     end
 
+    def self.logger=(logger)
+      @@logger = logger
+    end
+
     private
 
     def self.total_asserts(location)

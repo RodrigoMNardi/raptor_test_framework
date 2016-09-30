@@ -19,6 +19,8 @@ class Example < Raptor::TestSuite
     logger.info "==> #{@marble.inspect}"
     logger.info "==> #{@count}"
 
+    assert_true true
+
     context 'Starting verification 2' do
       assert_true(false, {issues: '6545, 54566', message: 'BUG example'})
     end
