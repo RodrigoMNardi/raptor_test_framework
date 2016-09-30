@@ -1,5 +1,3 @@
-require '../raptor/raptor'
-
 class Example < Raptor::TestSuite
   configure do
     @count = 0

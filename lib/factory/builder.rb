@@ -5,14 +5,14 @@ require 'lib/raptor/raptor'
 module Factory
   class Builder
     def initialize(profile)
+      puts profile.inspect
+
       if profile.has_key? :test
         return     if profile[:test].match(/\.[rb]~/)
         return unless profile[:test].match(/\.rb/)
 
-        require "#{File.dirname(__FILE__)}/../" + profile[:test]
+        require "#{File.dirname(__FILE__)}/../../" + profile[:test]
       end
-
-      run
     end
 
     def run
@@ -23,11 +23,5 @@ module Factory
         test.run
       end
     end
-
-    private
-
-
   end
 end
-
-Factory::Builder.new({test: 'tests/example.rb'})
