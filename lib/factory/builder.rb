@@ -27,10 +27,9 @@
 #  either expressed or implied, of the FreeBSD Project.
 #
 
-$:.unshift "#{File.dirname(__FILE__)}/../../"
-
 require 'lib/factory/reporter'
 require 'lib/raptor/raptor'
+require 'lib/factory/reporter'
 
 module Factory
   class Builder

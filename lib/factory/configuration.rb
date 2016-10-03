@@ -27,13 +27,19 @@
 #  either expressed or implied, of the FreeBSD Project.
 #
 
-require 'net/ssh'
+require 'singleton'
+require 'yaml'
 
-module Connection
-  class SSH
-    def initialize(name, info)
-      @name = name
-      @info = info
+module Factory
+  class Configuration
+    include Singleton
+
+    def _config_file_(config_file)
+      @configuration = YAML.load_file(config_file)
+    end
+
+    def dir_root
+      @configuration['dir_root']
     end
   end
 end

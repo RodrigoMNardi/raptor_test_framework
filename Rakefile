@@ -1,5 +1,7 @@
-$:.unshift "#{File.dirname(__FILE__)}"
+$:.unshift File.dirname(__FILE__)
 
+require 'lib/factory/configuration'
+Factory::Configuration.instance._config_file_("#{File.dirname(__FILE__)}/configuration.yml")
 require 'lib/factory/builder'
 
 namespace :builder do

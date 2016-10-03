@@ -27,8 +27,6 @@
 #  either expressed or implied, of the FreeBSD Project.
 #
 
-$:.unshift "#{File.dirname(__FILE__)}/../../"
-
 require 'logger'
 require 'lib/raptor/assert'
 require 'lib/factory/reporter'
