@@ -4,6 +4,7 @@ Framework to integration / unit tests.
 
 === Test Output ===
 
+```
 I, [2016-10-02T21:32:50.190815 #5728]  INFO -- : configure
 I, [2016-10-02T21:32:50.190815 #5728]  INFO -- : Marble Variable
 I, [2016-10-02T21:32:50.190815 #5728]  INFO -- : Verification 01
@@ -24,3 +25,4 @@ Result  :
           Failed      : 66.67%
           Warn        : 0
           Fatal Error : 1
+```
