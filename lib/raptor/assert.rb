@@ -30,36 +30,47 @@
 module Raptor
   module Assert
     def assert_greater_than(greater, less, params={})
+      params[:assert] = 'assert_greater_than'
+      params[:args]        = "#{greater} > #{less}"
       assert greater > less, params
     end
 
-    def assert_equal_greater_than(threshold, found, params={})
-      assert found >= threshold, params
+    def assert_equal_greater_than(limit, found, params={})
+      params[:assert] = 'assert_equal_greater_than'
+      params[:args]        = "#{found} >= #{limit}"
+      assert found >= limit, params
     end
 
-    def assert_less_equal_than(threshold, found, params={})
-      assert found <= threshold, params
+    def assert_less_equal_than(limit, found, params={})
+      params[:assert] = 'assert_less_equal_than'
+      params[:args]        = "#{found} <= #{limit}"
+      assert found <= limit, params
     end
 
-    def assert_less_than(threshold, found, params={})
-      assert found < threshold, params
+    def assert_less_than(limit, found, params={})
+      params[:assert] = 'assert_less_equal_than'
+      params[:args]        = "#{found} <= #{limit}"
+      assert found < limit, params
     end
 
-    def assert_equal(obj_one, obj_two, params={})
-      assert obj_one == obj_two, params
+    def assert_equal(one, two, params={})
+      params[:assert] = 'assert_less_equal_than'
+      params[:args]        = "#{one} == #{two}"
+      assert one == two, params
     end
 
-    def assert_not_equal(obj_one, obj_two, params={})
-      assert obj_one != obj_two, params
+    def assert_not_equal(one, two, params={})
+      params[:assert] = 'assert_not_equal'
+      params[:args]        = "#{one} != #{two}"
+      assert one != two, params
     end
 
-    def assert_is_empty?(array, params={})
-      assert array.empty?, params
-    end
+    def assert_raises(*raises_list)
+      params[:assert] = 'assert_raises'
+      params[:args]        = "#{raises_list.inspect}"
 
-    def assert_raises(*raises)
-      if raises.last.to_s.match(/^\d+$/)
-        @issue = raises.delete_at(raises.index(raises.last))
+      if raises_list.last.to_s.match(/^\d+$/)
+        @issue = raises_list.delete_at(raises_list.index(raises_list.last))
       end
 
       begin
@@ -67,12 +78,15 @@ module Raptor
           yield
         end
         assert false, {}
-      rescue *raises
+      rescue *raises_list
         assert true, {}
       end
     end
 
     def assert_not_raise(params={})
+      params[:assert] = 'assert_not_raise'
+      params[:args]        = ''
+
       begin
         if block_given?
           yield
@@ -92,8 +106,10 @@ module Raptor
     end
 
     def assert_match(string, reg_exp, params={})
+      params[:assert] = 'assert_match'
+      params[:args]        = "#{string.inspect}.match(#{reg_exp})"
 
-      assert false, params unless string.is_a? String
+      raise 'Invalid type - Used only for string' unless string.is_a? String
 
       if string.match(reg_exp)
         assert true, params
@@ -103,7 +119,10 @@ module Raptor
     end
 
     def assert_not_match(string, reg_exp, params={})
-      assert false, params unless string.is_a? String
+      params[:assert] = 'assert_not_match'
+      params[:args]        = "#{string.inspect}.match(#{reg_exp})"
+
+      raise 'Invalid type - Used only for string' unless string.is_a? String
 
       if string.match(reg_exp)
         assert false, params
@@ -112,38 +131,63 @@ module Raptor
       end
     end
 
+    def assert_is_empty?(array, params={})
+      params[:assert] = 'assert_is_empty?'
+      params[:args]        = "#{array.inspect}"
+      assert array.empty?, params
+    end
+
     def assert_not_empty?(obj, params={})
+      params[:assert] = 'assert_not_empty?'
+      params[:args]        = "#{obj.inspect}"
+
       assert !obj.empty?, params
     end
 
-    def assert_empty?(obj, params={})
-      assert obj.empty?, params
-    end
-
-    def assert_true(obj, params={})
-      assert obj, params 
-    end
-
-    def assert_false(obj, params={})
-      assert !obj, params
-    end
-
     def assert_class(expect, obj, params={})
+      params[:assert] = 'assert_class'
+      params[:args]        = "#{expect} == #{obj}"
+
       assert obj.kind_of? expect, params
     end
 
-    def assert_in_delta(delta, expected, value, params={})
-      top = expected + delta
-      bottom = expected - delta
-      if value > top or value < bottom
+    def assert_in_delta(found_point, middle_point, delta, params={})
+      params[:assert] = 'assert_in_delta'
+
+      raise 'Invalid type - Used only for integer' unless found_point.is_a? Integer  or
+                                                          middle_point.is_a? Integer or
+                                                          delta.is_a? Integer
+
+      top    = middle_point + delta
+      bottom = middle_point - delta
+      params[:args]        = "#{found_point} > #{top} or #{found_point} < #{bottom}"
+
+      if found_point > top or found_point < bottom
         assert false, params
       else
         assert true, params
       end
     end
 
-    def assert_include?(expected, value, params={})
-      assert expected.include? value, params
+    def assert_include?(expected, found, params={})
+      params[:assert] = 'assert_in_delta'
+      params[:args]        = "#{expected}.include? #{found}"
+
+      assert expected.include? found, params
+    end
+
+    def assert_true(found, params={})
+      params[:assert] = 'assert_true'
+      params[:args]        = "#{found}"
+
+      assert found, params
+    end
+
+    def assert_false(found, params={})
+      params[:assert] = 'assert_false'
+      params[:args]        = "#{found}"
+
+      assert !found, params
     end
   end
 end

@@ -130,10 +130,15 @@ module Raptor
 
       Raptor::Assert.class_eval do
         define_method(:assert) do |bool, params|
-          msg    = ''
-          issues = ''
-          issues = " Possible issues: #{params[:issues]}" if params.is_a? Hash and params.has_key? :issues
-          msg    = " - #{params[:message]}"               if params.is_a? Hash and params.has_key? :message
+          msg         = ''
+          issues      = ''
+          assert      = ''
+          args        = ''
+          result      = "\nResult         : #{(bool)? 'Passed' : 'Failed'}"
+          issues      = "\nPossible issues: #{params[:issues]}"  if params.is_a? Hash and params.has_key? :issues
+          msg         = "\nMessage        : #{params[:message]}" if params.is_a? Hash and params.has_key? :message
+          assert      = "\nAssert         : #{params[:assert]}"  if params.is_a? Hash and params.has_key? :assert
+          args        = "\nParameter(s)   : #{params[:args]}"    if params.is_a? Hash and params.has_key? :args
 
           if bool
             @reporter.add_passed
@@ -141,7 +146,7 @@ module Raptor
             @reporter.add_failed
           end
 
-          @@logger.info "==> Assert: #{bool}#{msg} #{issues}"
+          @@logger.info "#{result}#{assert}#{args}#{issues}#{msg}"
         end
       end
     end
