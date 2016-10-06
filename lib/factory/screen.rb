@@ -33,6 +33,9 @@ module Factory
   class Screen
     def initialize
       @logger = Logger.new($stdout)
+      @logger.formatter = proc do |severity, datetime, progname, msg|
+        "[#{datetime.strftime('%d/%m/%Y %H:%M:%S')}] #{severity}: #{msg}\n"
+      end
     end
 
     def info(message)
