@@ -39,7 +39,9 @@ module Raptor
     @@logger               = Factory::Screen.new
     @@suite                = {}
     @@suite[:description]  = nil
-    @@suite[:configure]    = nil
+    @@suite[:setup]        = nil
+    @@suite[:teardown]     = nil
+    @@suite[:terminate]    = nil
     @@suite[:verification] = []
     @@suite[:context]      = []
 
@@ -51,8 +53,16 @@ module Raptor
       @@suite[:description] = block
     end
 
-    def self.configure(&block)
-      @@suite[:configure] = ['configure', block]
+    def self.setup(&block)
+      @@suite[:setup] = ['setup', block]
+    end
+
+    def self.teardown(&block)
+      @@suite[:teardown] = ['teardown', block]
+    end
+
+    def self.terminate(&block)
+      @@suite[:terminate] = ['terminate', block]
     end
 
     def self.verification(name, &block)
@@ -80,22 +90,24 @@ module Raptor
         raise 'Description should be exist'
       end
 
-      if @@suite[:configure]
-        @@logger.info @@suite[:configure][0]
-        begin
-          @@logger.info @@suite[:configure][1].call
-        rescue Exception => error
-          @reporter.add_fatal_error(error)
-          return
-        end
-      end
+      self.call_method(:setup)
 
       @@suite[:verification].each do |name, block|
         begin
-          @@logger.info name
+          self.print_header(name, 'STARTING')
           block.call
+          self.print_header(name, 'FINISHING')
+
+          if @@suite[:teardown]
+            self.call_method(:teardown)
+            self.call_method(:setup)
+          end
+
         rescue Exception => error
-          @reporter.add_fatal_error(error)
+          self.print_header(name, 'FINISHING')
+
+          backtrace = error.backtrace.delete_if{|e| !e.match(/raptor/)}
+          @reporter.add_fatal_error("#{error.class} - #{error.message}\n#{backtrace.join("\n")}")
           return
         end
       end
@@ -110,6 +122,30 @@ module Raptor
     end
 
     private
+
+    def self.call_method(name)
+      if @@suite[name]
+        self.print_header(name, 'STARTING')
+        begin
+          @@logger.info @@suite[name][1].call
+
+          self.print_header(name, 'FINISHING')
+        rescue Exception => error
+          self.print_header(name, 'FINISHING')
+
+          backtrace = error.backtrace.delete_if{|e| !e.match(/raptor/)}
+          @reporter.add_fatal_error("#{error.class} - #{error.message}\n#{backtrace.join("\n")}")
+          return
+        end
+      end
+    end
+
+    def self.print_header(name, str_fns)
+      message = "------- #{str_fns} #{name} -------"
+      @@logger.info '-' * message.size
+      @@logger.info message
+      @@logger.info '-' * message.size
+    end
 
     def self.total_asserts(location)
       File.open(location, 'r').each_line do |line|
@@ -134,11 +170,11 @@ module Raptor
           issues      = ''
           assert      = ''
           args        = ''
-          result      = "\nResult         : #{(bool)? 'Passed' : 'Failed'}"
-          issues      = "\nPossible issues: #{params[:issues]}"  if params.is_a? Hash and params.has_key? :issues
-          msg         = "\nMessage        : #{params[:message]}" if params.is_a? Hash and params.has_key? :message
-          assert      = "\nAssert         : #{params[:assert]}"  if params.is_a? Hash and params.has_key? :assert
-          args        = "\nParameter(s)   : #{params[:args]}"    if params.is_a? Hash and params.has_key? :args
+          result      = "\nResult        : #{(bool)? 'Passed' : 'Failed'}"
+          issues      = "\nPossible bugs : #{params[:issues]}"  if params.is_a? Hash and params.has_key? :issues
+          msg         = "\nMessage       : #{params[:message]}" if params.is_a? Hash and params.has_key? :message
+          assert      = "\nAssert        : #{params[:assert]}"  if params.is_a? Hash and params.has_key? :assert
+          args        = "\nParameter(s)  : #{params[:args]}"    if params.is_a? Hash and params.has_key? :args
 
           if bool
             @reporter.add_passed

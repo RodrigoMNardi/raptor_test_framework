@@ -30,8 +30,9 @@
 module Factory
   class Reporter
     def initialize(test_name)
-      @test_name = test_name
-      @results   = {passed: 0.0, failed: 0.0, warn: 0, fatal_error: 0, total: 0}
+      @test_name   = test_name
+      @fatal_error = ''
+      @results     = {passed: 0.0, failed: 0.0, warn: 0, fatal_error: 0, total: 0}
     end
 
     def count_assert
@@ -60,15 +61,22 @@ module Factory
     end
 
     def display
-      "
+      msg = "
 Test    : #{@test_name}
 Asserts : #{@results[:total]}
 Result  :
           Passed      : #{((@results[:passed] / @results[:total]) * 100).round(2)}%
           Failed      : #{((@results[:failed] / @results[:total]) * 100).round(2)}%
           Warn        : #{@results[:warn]}
-          Fatal Error : #{@results[:fatal_error]}
-"
+          Fatal Error : #{@results[:fatal_error]}"
+      if @results[:fatal_error] >=1
+        msg += "
+
+====== FATAL ERRROR OUTPUT ======
+
+#{@fatal_error}"
+      end
+      msg
     end
   end
 end
