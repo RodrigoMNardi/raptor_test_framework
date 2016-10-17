@@ -45,8 +45,8 @@ module Raptor
     @@suite[:verification] = []
     @@suite[:context]      = []
 
-    def self.logger
-      @@logger
+    def self.output(message)
+      @@logger.info(message)
     end
 
     def self.description(&block)
@@ -73,7 +73,7 @@ module Raptor
       @@suite[:context] = [@@suite[:verification].last.first, message]
       @@logger.info "Context: #{message}"
 
-      yield if block_given?
+      yield block if block_given?
     end
 
     def self.add_report(reporter)
