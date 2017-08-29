@@ -30,9 +30,18 @@
 require 'logger'
 
 module Factory
+<<<<<<< HEAD:lib/factory/output.rb
   class Output
     def initialize(logdev=$stdout)
       @logger = Logger.new(logdev)
+=======
+  class Screen
+    def initialize
+      @logger = Logger.new($stdout)
+      @logger.formatter = proc do |severity, datetime, progname, msg|
+        "[#{datetime.strftime('%d/%m/%Y %H:%M:%S')}] #{severity}: #{msg}\n"
+      end
+>>>>>>> origin/development:lib/factory/screen.rb
     end
 
     def info(message)

@@ -49,6 +49,7 @@ module Factory
         next unless test.is_a? Class
         next if test.to_s.match(/Factory::Builder/i)
         next unless test < Raptor::TestSuite
+
         if @profile.has_key? :name
           next unless test.to_s.match(/#{@profile[:name]}/i)
         end
