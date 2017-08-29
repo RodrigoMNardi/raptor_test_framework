@@ -26,20 +26,23 @@
 #  of the authors and should not be interpreted as representing official policies, 
 #  either expressed or implied, of the FreeBSD Project.
 #
+require 'lib/connection/ssh'
+require 'lib/connection/telnet'
 
-require 'singleton'
-require 'yaml'
-
-module Factory
-  class Configuration
-    include Singleton
-
-    def _config_file_(config_file)
-      @configuration = YAML.load_file(config_file)
-    end
-
-    def tests_path
-      @configuration['tests_path']
+module Connection
+  class Interface
+    def new(conn_name, conn_info)
+      @host = nil
+      case conn_info[:session_type]
+        when :ssh
+          @host = Connection::SSH.new(conn_name, conn_info)
+        when :telnet
+          @host = Connection::Telnet.new(conn_name, conn_info)
+        else
+          msg_error  = "Invalid session type (#{conn_info[:session_type]}). Review your configuration file.\n"
+          msg_error += "Connection::Interface.new(#{conn_name}, #{conn_info.inspect})"
+          raise msg_error
+      end
     end
   end
 end

@@ -1,8 +1,13 @@
-=== Raptor Test Framework ===
+**Raptor Test Framework**
 
 Framework to integration / unit tests.
 
-=== Test Output ===
+**Execution**
+
+* _rake builder:single_test [test_name]_
+* _rake builder:multiple_test [test_names]_
+
+**Test Output**
 
 ```
 I, [2016-10-05T22:39:17.216597 #2316]  INFO -- : configure

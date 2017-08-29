@@ -30,13 +30,13 @@
 require 'logger'
 require 'lib/raptor/assert'
 require 'lib/factory/reporter'
-require 'lib/factory/screen'
+require 'lib/factory/output'
 
 module Raptor
   class TestSuite
     include Raptor::Assert
 
-    @@logger               = Factory::Screen.new
+    @@logger               = Factory::Output.new
     @@suite                = {}
     @@suite[:description]  = nil
     @@suite[:configure]    = nil
@@ -134,11 +134,11 @@ module Raptor
           issues      = ''
           assert      = ''
           args        = ''
-          result      = "\nResult         : #{(bool)? 'Passed' : 'Failed'}"
-          issues      = "\nPossible issues: #{params[:issues]}"  if params.is_a? Hash and params.has_key? :issues
-          msg         = "\nMessage        : #{params[:message]}" if params.is_a? Hash and params.has_key? :message
-          assert      = "\nAssert         : #{params[:assert]}"  if params.is_a? Hash and params.has_key? :assert
-          args        = "\nParameter(s)   : #{params[:args]}"    if params.is_a? Hash and params.has_key? :args
+          result      = "\nResult          : #{(bool)? 'Passed' : 'Failed'}"
+          issues      = "\nPossible defects: #{params[:issues]}"  if params.is_a? Hash and params.has_key? :issues
+          msg         = "\nMessage         : #{params[:message]}" if params.is_a? Hash and params.has_key? :message
+          assert      = "\nAssert          : #{params[:assert]}"  if params.is_a? Hash and params.has_key? :assert
+          args        = "\nParameter(s)    : #{params[:args]}"    if params.is_a? Hash and params.has_key? :args
 
           if bool
             @reporter.add_passed

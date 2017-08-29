@@ -27,19 +27,17 @@
 #  either expressed or implied, of the FreeBSD Project.
 #
 
-require 'singleton'
-require 'yaml'
+require 'net/telnet'
 
-module Factory
-  class Configuration
-    include Singleton
-
-    def _config_file_(config_file)
-      @configuration = YAML.load_file(config_file)
+module Connection
+  class Telnet
+    def initialize(conn_name, conn_info)
+      @conn_name = conn_name
+      @conn_info = conn_info
     end
 
-    def tests_path
-      @configuration['tests_path']
+    def connect
+
     end
   end
 end

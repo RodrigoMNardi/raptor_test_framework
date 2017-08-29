@@ -30,9 +30,9 @@
 require 'logger'
 
 module Factory
-  class Screen
-    def initialize
-      @logger = Logger.new($stdout)
+  class Output
+    def initialize(logdev=$stdout)
+      @logger = Logger.new(logdev)
     end
 
     def info(message)
