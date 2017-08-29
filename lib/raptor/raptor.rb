@@ -170,19 +170,12 @@ module Raptor
           issues      = ''
           assert      = ''
           args        = ''
-<<<<<<< HEAD
+
           result      = "\nResult          : #{(bool)? 'Passed' : 'Failed'}"
           issues      = "\nPossible defects: #{params[:issues]}"  if params.is_a? Hash and params.has_key? :issues
           msg         = "\nMessage         : #{params[:message]}" if params.is_a? Hash and params.has_key? :message
           assert      = "\nAssert          : #{params[:assert]}"  if params.is_a? Hash and params.has_key? :assert
           args        = "\nParameter(s)    : #{params[:args]}"    if params.is_a? Hash and params.has_key? :args
-=======
-          result      = "\nResult        : #{(bool)? 'Passed' : 'Failed'}"
-          issues      = "\nPossible bugs : #{params[:issues]}"  if params.is_a? Hash and params.has_key? :issues
-          msg         = "\nMessage       : #{params[:message]}" if params.is_a? Hash and params.has_key? :message
-          assert      = "\nAssert        : #{params[:assert]}"  if params.is_a? Hash and params.has_key? :assert
-          args        = "\nParameter(s)  : #{params[:args]}"    if params.is_a? Hash and params.has_key? :args
->>>>>>> origin/development
 
           if bool
             @reporter.add_passed

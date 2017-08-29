@@ -1,12 +1,2 @@
 # Created by .ignore support plugin (hsz.mobi)
-.idea/workspace.xml
-.idea/vcs.xml
-.idea/raptor_test_framework.iml
-.idea/encodings.xml
-.idea/encodings.xml
-.idea/.name
-.idea/.rakeTasks
-.idea/scopes/scope_settings.xml
-.idea/inspectionProfiles/Project_Default.xml
-.idea/misc.xml
-.idea/modules.xml
+.idea/*
