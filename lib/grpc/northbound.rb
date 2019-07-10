@@ -18,13 +18,14 @@ require 'date'
 require 'fileutils'
 require 'json'
 
+require_relative '../../lib/protocols/grpc/ruby/frr-northbound_pb'
+require_relative '../../lib/protocols/grpc/ruby/frr-northbound_services_pb'
+
 module GRPC
   module FRR
     class Northbound
       def initialize(host, options, security = :this_channel_is_insecure)
         create_northbound
-        require_relative '../../../grpc/ruby/frr-northbound_pb'
-        require_relative "../../../grpc/ruby/frr-northbound_services_pb"
         @stub = Frr::Northbound::Stub.new(host, security, options)
       end
 
@@ -69,12 +70,12 @@ module GRPC
       # Creates northbound GEM in grpc/ruby and loaded relative from this directory
       #
       def create_northbound
-        dir = File.expand_path(File.dirname(__FILE__)) + "/../../../"
-        unless File.exist? dir + "grpc/ruby"
-          FileUtils.mkdir(dir + "grpc/ruby")
-        end
-        $LOAD_PATH.unshift(dir + "grpc/ruby") unless $LOAD_PATH.include?(dir + "grpc/ruby")
-        %x(cd #{dir + "grpc"}; grpc_tools_ruby_protoc --ruby_out=./ruby --grpc_out=./ruby frr-northbound.proto)
+        # dir = File.expand_path(File.dirname(__FILE__)) + "/../../../"
+        # unless File.exist? dir + "grpc/ruby"
+        #   FileUtils.mkdir(dir + "grpc/ruby")
+        # end
+        # $LOAD_PATH.unshift(dir + "grpc/ruby") unless $LOAD_PATH.include?(dir + "grpc/ruby")
+        # %x(cd #{dir + "grpc"}; grpc_tools_ruby_protoc --ruby_out=./ruby --grpc_out=./ruby frr-northbound.proto)
       end
 
       def print_datatree(dt)

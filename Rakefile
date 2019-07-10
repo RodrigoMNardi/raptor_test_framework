@@ -31,7 +31,7 @@ namespace :builder do
     path = ''
     path += Factory::Configuration.instance.tests_path
     path += '/'
-    path += params[:name]
+    path += params[:name].gsub(/(.)([A-Z])/,'\1_\2').downcase
     path += '.rb'
 
     builder = Factory::Builder.new({test: path, name: params[:name]})

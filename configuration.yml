@@ -1,1 +1,22 @@
 tests_path: ./examples
+machines:
+  - localhost:
+      :address: 0.0.0.0
+      :type: :pc
+      :local: true
+      :features:
+        - :grpc
+        - :telnet
+        - :tcpdump
+      :grpc:
+        :rip: 50051
+      :interfaces:
+        - wlp3s0
+  - router_1:
+      :address: 192.168.1.10
+      :type: :vagrant
+      :features:
+        - :grpc
+      :interfaces:
+        - eth0
+        - eth1

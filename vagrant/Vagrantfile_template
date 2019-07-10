@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+require 'yaml'
+
+configurantion = CONFIG_YML = YAML.load_file("#{File.dirname(__FILE__)}/../configuration.yml")
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+  config.ssh.insert_key = false
+  configurantion["vagrant_hosts"].each do |router|
+    config.vm.define router[:hostname] do |node|
+      # Configure network interfaces.
+      router[:interfaces].each do |interface|
+        node.vm.network :private_network,
+                        ip: interface[:address],
+                        virtualbox__intnet: interface[:net]
+      end
+
+      # Configure VM settings.
+      node.vm.provider :virtualbox do |provider|
+        provider.default_nic_type = 'virtio'
+        provider.linked_clone = true
+      end
+    end
+  end
+end

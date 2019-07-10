@@ -28,9 +28,9 @@
 #
 
 require 'logger'
-require 'lib/raptor/assert'
-require 'lib/factory/reporter'
-require 'lib/factory/output'
+require_relative 'assert'
+require_relative '../factory/reporter'
+require_relative '../factory/output'
 
 module Raptor
   class TestSuite

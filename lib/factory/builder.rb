@@ -27,9 +27,9 @@
 #  either expressed or implied, of the FreeBSD Project.
 #
 
-require 'lib/factory/reporter'
-require 'lib/raptor/raptor'
-require 'lib/factory/reporter'
+require_relative 'reporter'
+require_relative '../raptor/raptor'
+require_relative '../../lib/connection/control_connection'
 
 module Factory
   class Builder
@@ -39,6 +39,10 @@ module Factory
       if profile.has_key? :test
         return     if profile[:test].match(/\.[rb]~/)
         return unless profile[:test].match(/\.rb/)
+
+        puts "*"*80
+        puts profile[:test]
+        puts "*"*80
 
         require "#{File.dirname(__FILE__)}/../../" + profile[:test]
       end
